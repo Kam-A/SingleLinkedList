@@ -4,6 +4,7 @@
 #include <utility>
 #include <algorithm>
 #include <vector>
+
 template <typename Type>
 class SingleLinkedList {
     // Узел списка
@@ -229,12 +230,12 @@ public:
     SingleLinkedList(std::initializer_list<Type> values) {
         // Реализуйте конструктор самостоятельно
         SingleLinkedList tmp;
-        auto it = values.end() - 1;
-        while (it != values.begin()) {
-            tmp.PushFront(*it);
-            --it;
+        /* скопировать внутрь tmp элементы other */
+        auto it = tmp.cbefore_begin();
+        for (const auto& val_ : values){
+            tmp.InsertAfter(it, val_);
+            ++it;
         }
-        tmp.PushFront(*it);
         swap(tmp);
     }
     SingleLinkedList(const SingleLinkedList& other) {
@@ -243,18 +244,10 @@ public:
 
         SingleLinkedList tmp;
         /* скопировать внутрь tmp элементы other */
-        std::vector<Type> cont_;
-        
-        for (auto const& val : other){
-            cont_.push_back(val);
-        }
-        if (cont_.size() != 0){
-            auto it = cont_.end() - 1;
-            while (it != cont_.begin()) {
-                tmp.PushFront(*it);
-                --it;
-            }
-            tmp.PushFront(*it);
+        auto it = tmp.cbefore_begin();
+        for (const auto& el_ : other){
+            tmp.InsertAfter(it, el_);
+            ++it;
         }
         // После того как элементы скопированы, обмениваем данные текущего списка и tmp
         swap(tmp);
@@ -272,12 +265,8 @@ public:
     // Обменивает содержимое списков за время O(1)
     void swap(SingleLinkedList& other) noexcept {
         // Реализуйте обмен содержимого списков самостоятельно
-        Node head_temp = head_;
-        size_t size_temp = size_;
-        head_.next_node = other.head_.next_node;
-        size_ = other.size_;
-        other.head_.next_node = head_temp.next_node;
-        other.size_ = size_temp;
+        std::swap(head_.next_node, other.head_.next_node);
+        std::swap(size_, other.size_);
     }
     void PushFront(const Type& value) {
         Node* node_pushed = new Node(value,head_.next_node);
@@ -325,7 +314,7 @@ bool operator==(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>&
 template <typename Type>
 bool operator!=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
     // Заглушка. Реализуйте сравнение самостоятельно
-    return !(lhs == rhs);//!std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    return !(lhs == rhs);
 }
 
 template <typename Type>
@@ -335,21 +324,22 @@ bool operator<(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& 
 }
 
 template <typename Type>
+bool operator>=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
+    // Заглушка. Реализуйте сравнение самостоятельно
+    return !(lhs < rhs);
+}
+
+template <typename Type>
 bool operator<=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
     // Заглушка. Реализуйте сравнение самостоятельно
-    return (lhs < rhs || lhs == rhs);
+    return !(lhs > rhs);
 }
 
 template <typename Type>
 bool operator>(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
     // Заглушка. Реализуйте сравнение самостоятельно
-    return !(lhs <= rhs);
-}
-
-template <typename Type>
-bool operator>=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    // Заглушка. Реализуйте сравнение самостоятельно
-    return !(lhs < rhs);
+    return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(),
+                                        [](const Type& lh_el,const Type& rh_el){return lh_el > rh_el;});
 }
 
 // Эта функция проверяет работу класса SingleLinkedList
