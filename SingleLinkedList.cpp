@@ -170,21 +170,18 @@ public:
     // Разыменовывать этот итератор нельзя - попытка разыменования приведёт к неопределённому поведению
     
     [[nodiscard]] Iterator before_begin() noexcept {
-        // Реализуйте самостоятельно
         return Iterator(&head_);
     }
 
     // Возвращает константный итератор, указывающий на позицию перед первым элементом односвязного списка.
     // Разыменовывать этот итератор нельзя - попытка разыменования приведёт к неопределённому поведению
     [[nodiscard]] ConstIterator cbefore_begin() const noexcept {
-        // Реализуйте самостоятельно
         return ConstIterator((Node*)&head_);
     }
 
     // Возвращает константный итератор, указывающий на позицию перед первым элементом односвязного списка.
     // Разыменовывать этот итератор нельзя - попытка разыменования приведёт к неопределённому поведению
     [[nodiscard]] ConstIterator before_begin() const noexcept {
-        // Реализуйте самостоятельно
         return ConstIterator((Node*)&head_);
     }
     /*
@@ -193,7 +190,6 @@ public:
      * Если при создании элемента будет выброшено исключение, список останется в прежнем состоянии
      */
     Iterator InsertAfter(ConstIterator pos, const Type& value) {
-        // Заглушка. Реализуйте метод самостоятельно
         Node* node_before_ins = pos.node_;
         Node* node_after_ins = node_before_ins->next_node;
         Node* node_to_ins = new Node(value,node_after_ins);
@@ -206,7 +202,6 @@ public:
      * Возвращает итератор на элемент, следующий за удалённым
      */
     Iterator EraseAfter(ConstIterator pos) noexcept {
-        // Заглушка. Реализуйте метод самостоятельно
         Node* node_before_del = pos.node_;
         Node* node_to_del = node_before_del->next_node;
         node_before_del->next_node = node_to_del->next_node;
@@ -228,7 +223,6 @@ public:
             size_ = 0;
     }
     SingleLinkedList(std::initializer_list<Type> values) {
-        // Реализуйте конструктор самостоятельно
         SingleLinkedList tmp;
         /* скопировать внутрь tmp элементы other */
         auto it = tmp.cbefore_begin();
@@ -254,7 +248,6 @@ public:
         // Теперь tmp пуст, а текущий список содержит копию элементов other
     }
     SingleLinkedList& operator=(const SingleLinkedList& rhs) {
-        // Реализуйте присваивание самостоятельно
         if (this != &rhs) {
             auto rhs_copy(rhs);
             swap(rhs_copy);
@@ -264,7 +257,6 @@ public:
 
     // Обменивает содержимое списков за время O(1)
     void swap(SingleLinkedList& other) noexcept {
-        // Реализуйте обмен содержимого списков самостоятельно
         std::swap(head_.next_node, other.head_.next_node);
         std::swap(size_, other.size_);
     }
@@ -307,42 +299,36 @@ void swap(SingleLinkedList<Type>& lhs, SingleLinkedList<Type>& rhs) noexcept {
 
 template <typename Type>
 bool operator==(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    // Заглушка. Реализуйте сравнение самостоятельно
     return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
 template <typename Type>
 bool operator!=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    // Заглушка. Реализуйте сравнение самостоятельно
     return !(lhs == rhs);
 }
 
 template <typename Type>
 bool operator<(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    // Заглушка. Реализуйте сравнение самостоятельно
     return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
 template <typename Type>
 bool operator>=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    // Заглушка. Реализуйте сравнение самостоятельно
     return !(lhs < rhs);
 }
 
 template <typename Type>
 bool operator<=(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    // Заглушка. Реализуйте сравнение самостоятельно
     return !(lhs > rhs);
 }
 
 template <typename Type>
 bool operator>(const SingleLinkedList<Type>& lhs, const SingleLinkedList<Type>& rhs) {
-    // Заглушка. Реализуйте сравнение самостоятельно
     return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(),
                                         [](const Type& lh_el,const Type& rh_el){return lh_el > rh_el;});
 }
 
-// Эта функция проверяет работу класса SingleLinkedList
+
 void Test4() {
     struct DeletionSpy {
         ~DeletionSpy() {
